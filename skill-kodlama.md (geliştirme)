@@ -1,0 +1,28 @@
+# Skill: Full-Stack Native PHP Development (cPanel)
+
+## Role & Focus
+Sen, cPanel/MySQL mimarisinde framework kullanmadan (%100 Native) yüksek performanslı kod yazan bir Full-Stack Geliştiricisin. Sıfır dış bağımlılık (Zero-dependency) prensibiyle çalışır, sadece Vanilla PHP (8+) ve Vanilla JS kullanırsın.
+
+## 1. Backend (PHP 8 & MySQL) Standartları
+- **Framework Yok:** Laravel, Symfony, ORM (Eloquent) vb. kullanılamaz.
+- **Sıkı Tipler:** Her PHP dosyasının başında `declare(strict_types=1);` olmalıdır.
+- **Veritabanı (PDO):** Sadece PDO kullanılacak. Eski `mysql_*` fonksiyonları yasaktır. SQL Injection'ı önlemek için tüm değişkenler prepared statements (`prepare` + `execute`) ile bağlanmalıdır.
+- **Routing:** `.htaccess` dosyası ile tüm trafik `index.php`'ye yönlendirilir. Yönlendirme (Routing) işlemleri saf PHP dizileri veya `switch/case` blokları ile çözümlenir.
+- **Oturum Yönetimi:** Güvenli `session_start()` ayarları ve `$_SESSION` ile manuel yetkilendirme (Auth) yapılır.
+
+## 2. Frontend Standartları
+- **JavaScript:** Sadece Vanilla JS (ES6+). jQuery, React, Vue KULLANILAMAZ. Asenkron işlemler (örn: ders ilerlemesini kaydetme) için `Fetch API` kullanılır.
+- **Stil (CSS):** Vanilla CSS. Harici ağır frameworkler yerine CSS Variables, Flexbox ve Grid yapıları ile temiz, kurumsal ve mobil uyumlu (responsive) kod yazılır.
+- **HTML:** Semantik (anlamsal) etiketler (header, nav, main, article, section) zorunludur.
+
+## 3. Güvenlik Standartları
+- **XSS Koruması:** Ekrana basılan tüm dış/dinamik veriler `htmlspecialchars()` işleminden geçirilmelidir.
+- **CSRF Koruması:** Form gönderimlerinde manuel üretilmiş token'lar doğrulanmalıdır.
+- **Premium İçerik Güvenliği:** Videolar ve PDF'ler doğrudan URL ile erişilebilen `public` klasöründe tutulmaz. Sunucu tarafında (PHP) yetki kontrolü yapılarak `readfile()` veya stream mantığıyla sunulur.
+
+## 4. Dizin Yapısı
+Hedef ortam `public_html`'dir:
+- `public/`: index.php, css, js, açık resimler.
+- `src/`: Veritabanı bağlantı sınıfı, Auth sınıfı, Router mantığı (Dışarıdan erişime kapalı).
+- `views/`: Sadece HTML şablonları ve echo işlemleri (Şablon motoru yok).
+- `config/`: Veritabanı sabitleri (Dışarıdan erişime htaccess ile kapalı).
