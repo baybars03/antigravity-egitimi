@@ -1,0 +1,30 @@
+# Vanilla PHP - cPanel Deployment Workflow
+
+## Phase 1: Local Native Development
+1. **Kodlama:** IDE üzerinde saf PHP dosyaları, HTML, CSS ve Vanilla JS yazılır.
+2. **Veritabanı Senkronizasyonu:** Tablo oluşturma veya değiştirme işlemleri için manuel `.sql` sorguları yazılır ve `database/updates.sql` adlı yerel bir dosyada biriktirilir.
+
+## Phase 2: Preparation (Pre-Deployment)
+1. Proje saf PHP olduğu için `composer install` veya `npm run build` gibi sunucu tarafında çalıştırılacak derleme komutlarına ihtiyaç yoktur. (Frontend için yerelde SCSS/JS derlemesi yapıldıysa sadece çıktı dosyaları alınır).
+2. Sadece canlıda çalışacak dosyalar (örn: `src`, `views`, `public` klasörleri ve `index.php`, `.htaccess`) seçilir.
+3. IDE gizli dosyaları (`.rules`, `.skill.md`), test dosyaları veya `.sql` dump dosyaları yükleme paketine **dahil edilmez**.
+4. Tüm yayınlanacak dosyalar `release.zip` olarak sıkıştırılır.
+
+## Phase 3: Database Migration (cPanel phpMyAdmin)
+1. cPanel üzerinden **phpMyAdmin** arayüzü açılır.
+2. Yerelde oluşturulan `updates.sql` içeriği canlı veritabanına manuel olarak Import edilir veya SQL sekmesinden çalıştırılır.
+
+## Phase 4: Production Deployment (cPanel File Manager / FTP)
+**Yöntem 1: Dosya Yöneticisi (File Manager)**
+1. cPanel'e giriş yapılır ve Dosya Yöneticisi açılır.
+2. Hedef dizin olan `public_html/` açılır.
+3. Hazırlanan `release.zip` dosyası yüklenir ve `public_html` içine Extract (Çıkar) edilir.
+
+**Yöntem 2: FTP / SFTP**
+1. FileZilla vb. bir FTP istemcisi ile sunucuya bağlanılır.
+2. Değişen ve güncellenen spesifik PHP/CSS/JS dosyaları doğrudan eski dosyaların üzerine sürüklenip bırakılarak yüklenir.
+
+## Phase 5: Post-Deployment Config
+1. Canlı veritabanı kimlik bilgileri, dışarıdan erişime kapalı olan `config.php` dosyası üzerinden manuel güncellenir.
+2. Dosya izinleri kontrol edilir (Klasörler 755, Dosyalar 644).
+3. Canlı URL üzerinden genel fonksiyonellik test edilir.
